@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="referrer" content="no-referrer" />
+  <title>SilentHuddle</title>
+  <link rel="icon" href="src/assets/logo.ico" />
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- TELA INICIAL — criar / entrar em uma sala                    -->
+  <!-- ============================================================ -->
+  <section id="screen-home" class="screen screen--home">
+    <div class="home-card">
+      <h1 class="home-title">SilentHuddle</h1>
+
+      <button id="btn-avatar-picker" class="avatar-picker" type="button" data-i18n-title="chooseAvatar" aria-label="Escolher avatar">
+        <img src="src/assets/icons/user.svg" class="avatar-picker__icon" alt="" />
+      </button>
+
+      <button id="btn-avatar-color" class="btn btn--outline" type="button">
+        <span data-i18n="avatarColor">Cor do avatar</span>
+      </button>
+
+      <form id="form-home" class="home-form">
+        <input id="input-nickname" class="input" type="text" name="nickname" data-i18n-placeholder="nickname" placeholder="Nickname" maxlength="18" autocomplete="off" />
+
+        <button id="btn-create-room" class="btn btn--full btn--green" type="submit">
+          <span data-i18n="createRoom">Criar Sala</span>
+        </button>
+        <button id="btn-join-room" class="btn btn--full btn--blue" type="button">
+          <span data-i18n="joinRoom">Entrar na Sala</span>
+        </button>
+        <p class="home-trust-warning" data-i18n="trustWarning">
+          Conecte-se apenas com pessoas confiáveis. Em conexões peer-to-peer, seu IP público fica visível para o dispositivo da outra pessoa.
+        </p>
+      </form>
+      <button id="btn-configure-backend" class="btn btn--outline home-backend-button" type="button">
+        <img src="src/assets/icons/gear.svg" alt="" />
+        <span data-i18n="configureBackend">Configurar servidor</span>
+      </button>
+    </div>
+    <p class="connection-note connection-note--home" data-i18n="encryptedConnection">Conexão criptografada via WebRTC</p>
+    <div class="language-switcher language-switcher--home" aria-label="Language">
+      <button id="btn-language-pt" class="language-button" type="button" data-i18n-title="switchPortuguese" aria-label="Usar português" title="Usar português">🇧🇷</button>
+      <button id="btn-language-en" class="language-button" type="button" data-i18n-title="switchEnglish" aria-label="Use English" title="Use English">🇺🇸</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TELA DA SALA — chat + call                                    -->
+  <!-- ============================================================ -->
+  <section id="screen-app" class="screen screen--app hidden">
+
+    <!-- ------------------------- TOPBAR ------------------------- -->
+    <header class="topbar">
+      <div class="topbar__side topbar__side--left">
+        <button id="btn-toggle-settings" class="icon-btn" type="button" data-i18n-title="settings" aria-label="Configurações" title="Configurações">
+          <img src="src/assets/icons/gear.svg" alt="" />
+        </button>
+        <button id="btn-toggle-participants" class="icon-btn is-active" type="button" data-i18n-title="participants" aria-label="Participantes" title="Participantes">
+          <img src="src/assets/icons/people.svg" alt="" />
+        </button>
+      </div>
+
+      <div class="topbar__room">
+        <span class="topbar__room-name">SilentHuddle</span>
+      </div>
+
+      <div class="topbar__side topbar__side--right">
+        <button id="btn-add-friend" class="btn btn--pill btn--outline" type="button" data-i18n-title="addFriend">
+          <img src="src/assets/icons/add-friend.svg" alt="" />
+          <span data-i18n="addFriend">Adicionar</span>
+        </button>
+        <button id="btn-start-call" class="btn btn--pill btn--blue" type="button">
+          <img src="src/assets/icons/phone.svg" alt="" />
+          <span data-i18n="call">Call</span>
+        </button>
+        <button id="btn-leave-room" class="btn btn--pill btn--red" type="button">
+          <img src="src/assets/icons/exit.svg" alt="" />
+          <span data-i18n="leave">Sair</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-body">
+
+      <!-- ------------------------- SIDEBAR ------------------------- -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar__toolbar">
+          <button id="btn-toggle-sidebar" class="sidebar-toggle" type="button" data-i18n-title="collapseSidebar" aria-label="Encurtar barra lateral" title="Encurtar barra lateral" aria-expanded="true">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+        <!-- lista de participantes conectados -->
+        <div id="sidebar-participants" class="sidebar__panel">
+          <p id="connected-count" class="sidebar__title">Conectados: 0</p>
+
+          <ul id="participants-list" class="participants-list">
+            <!--
+              item gerado via JS, exemplo de estrutura:
+              <li class="participants-list__item" data-user-id="" data-in-call="false">
+                <img src="src/assets/icons/user.svg" class="participants-list__avatar" alt="" />
+                <span class="participants-list__name">Nickname</span>
+              </li>
+            -->
+          </ul>
+        </div>
+
+        <!-- configurações de dispositivos -->
+        <div id="sidebar-settings" class="sidebar__panel hidden">
+          <p class="sidebar__title" data-i18n="settings">Configurações</p>
+
+          <label class="field">
+            <span class="field__label" data-i18n="microphone">Microfone</span>
+            <select id="select-microphone" class="select"></select>
+          </label>
+
+          <label class="field">
+            <span class="field__label" data-i18n="audioOutput">Fone / saída de áudio</span>
+            <select id="select-speaker" class="select"></select>
+          </label>
+
+          <label class="field">
+            <span class="field__label" data-i18n="camera">Câmera</span>
+            <select id="select-camera" class="select"></select>
+          </label>
+
+          <div class="settings-divider" data-i18n="audio">Áudio</div>
+
+          <label class="setting-toggle">
+            <span data-i18n="noiseSuppression">Supressão de ruído</span>
+            <input id="setting-noise-suppression" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <div class="settings-divider" data-i18n="soundEffects">Efeitos Sonoros</div>
+
+          <label class="setting-toggle">
+            <span data-i18n="callEffects">Efeitos da Call</span>
+            <input id="setting-call-effects" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <label class="setting-toggle">
+            <span data-i18n="buttonEffects">Efeitos dos Botões</span>
+            <input id="setting-button-effects" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <label class="setting-toggle">
+            <span data-i18n="messages">Mensagens</span>
+            <input id="setting-message-effects" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <div class="settings-divider" data-i18n="language">Idioma</div>
+
+          <div class="language-switcher language-switcher--settings" aria-label="Language">
+            <button id="btn-language-settings-pt" class="language-button" type="button" data-i18n-title="switchPortuguese" aria-label="Usar português" title="Usar português">🇧🇷</button>
+            <button id="btn-language-settings-en" class="language-button" type="button" data-i18n-title="switchEnglish" aria-label="Use English" title="Use English">🇺🇸</button>
+          </div>
+        </div>
+        <p class="connection-note connection-note--sidebar" data-i18n="encryptedConnection">Conexão criptografada via WebRTC</p>
+      </aside>
+
+      <!-- ------------------------- CONTEÚDO PRINCIPAL ------------------------- -->
+      <main class="main-content main-content--chat-focus">
+
+        <!-- área de vídeo / chamada -->
+        <section id="video-area" class="video-area hidden">
+
+          <!-- grade de participantes da call -->
+          <div id="video-grid" class="video-grid hidden">
+            <!--
+              tile gerado via JS, exemplo de estrutura:
+              <div class="video-tile" data-user-id="">
+                <div class="video-tile__box">
+                  <video class="video-tile__stream hidden" autoplay playsinline muted></video>
+                  <img class="video-tile__avatar" src="src/assets/icons/user.svg" alt="" />
+                  <img class="video-tile__screen-icon hidden" src="src/assets/icons/screen.svg" alt="" />
+                  <span class="video-tile__badge hidden"><img src="src/assets/icons/camera.svg" alt="" /></span>
+                </div>
+                <span class="video-tile__label">Nickname</span>
+              </div>
+            -->
+          </div>
+
+          <!-- visualização de compartilhamento de tela em foco -->
+          <div id="screen-share-view" class="screen-share-view hidden">
+            <div id="screen-share-main" class="screen-share-main">
+              <video id="screen-share-stream" class="screen-share-main__stream hidden" autoplay playsinline></video>
+              <img src="src/assets/icons/screen.svg" class="screen-share-main__placeholder" alt="" />
+              <div class="screen-share-actions">
+                <button id="btn-screen-fullscreen" class="screen-action-btn" type="button" data-i18n-title="openFullscreen" aria-label="Tela cheia" aria-pressed="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+                </button>
+                <button id="btn-screen-pip" class="screen-action-btn" type="button" data-i18n-title="openPip" title="Abrir em Picture-in-Picture" aria-label="Abrir compartilhamento em Picture-in-Picture">
+                  PiP
+                </button>
+                <button id="btn-stop-watching-screen" class="screen-action-btn screen-action-btn--danger" type="button" data-i18n-title="stopWatching" title="Parar de assistir" aria-label="Parar de assistir ao compartilhamento">
+                  <img src="src/assets/icons/screen-off.svg" alt="" />
+                </button>
+              </div>
+            </div>
+            <div id="screen-share-thumbs" class="screen-share-thumbs">
+              <!-- video-tiles (variante pequena) reaproveitados via JS -->
+            </div>
+          </div>
+
+          <!-- botão para entrar em uma call já em andamento -->
+          <button id="btn-join-call" class="btn btn--pill btn--green btn--join-call hidden" type="button">
+            <span data-i18n="joinCall">Juntar-se</span>
+          </button>
+
+          <!-- rótulo exibido enquanto assiste ao compartilhamento de tela de alguém -->
+          <p id="watching-label" class="watching-label hidden">
+            <span data-i18n="watchingScreen">Assistindo tela de</span> <span id="watching-username">-</span>
+          </p>
+
+          <!-- controles da própria call (visível apenas quando o usuário está na call) -->
+          <div id="call-controls" class="call-controls hidden">
+            <button id="btn-toggle-mic" class="control-btn control-btn--on" type="button" data-i18n-title="microphone" aria-label="Microfone" title="Microfone">
+              <img src="src/assets/icons/mic.svg" alt="" />
+            </button>
+            <button id="btn-toggle-speaker" class="control-btn control-btn--on" type="button" data-i18n-title="listenAudio" aria-label="Ouvir áudio" title="Ouvir áudio">
+              <img src="src/assets/icons/headphone.svg" alt="" />
+            </button>
+            <button id="btn-toggle-camera" class="control-btn control-btn--off" type="button" data-i18n-title="camera" aria-label="Câmera" title="Câmera">
+              <img src="src/assets/icons/camera-off.svg" alt="" />
+            </button>
+            <button id="btn-toggle-screenshare" class="control-btn control-btn--off" type="button" data-i18n-title="shareScreen" aria-label="Compartilhar tela" title="Compartilhar tela">
+              <img src="src/assets/icons/screen-off.svg" alt="" />
+            </button>
+            <button id="btn-leave-call" class="control-btn control-btn--danger" type="button" data-i18n-title="leaveCall" aria-label="Sair da chamada" title="Sair da chamada">
+              <img src="src/assets/icons/exit.svg" alt="" />
+            </button>
+          </div>
+        </section>
+
+        <!-- área de chat -->
+        <section id="chat-area" class="chat-area">
+          <div id="chat-messages" class="chat-messages">
+            <!--
+              mensagem gerada via JS, exemplo de estrutura:
+              <div class="chat-message">
+                <img class="chat-message__avatar" src="src/assets/icons/user.svg" alt="" style="--avatar-color:#4ade80" />
+                <div class="chat-message__body">
+                  <p class="chat-message__meta"><span class="chat-message__author">Nickname</span> - <span class="chat-message__time">20:42</span></p>
+                  <p class="chat-message__text">Mensagem</p>
+                </div>
+              </div>
+            -->
+          </div>
+
+          <div id="reply-context" class="reply-context hidden">
+            <span id="reply-context-text"></span>
+            <button id="btn-cancel-reply" class="reply-context__cancel" type="button" data-i18n-title="cancelReply" aria-label="Cancelar resposta" title="Cancelar resposta">×</button>
+          </div>
+
+          <form id="form-chat" class="chat-input-bar">
+            <button id="btn-attach-file" class="icon-btn" type="button" data-i18n-title="attachFile" aria-label="Anexar arquivo" title="Anexar arquivo">
+              <img src="src/assets/icons/attach.svg" alt="" />
+            </button>
+            <input id="input-chat" class="chat-input" type="text" maxlength="8192" data-i18n-placeholder="chatPlaceholder" placeholder="Conversar" autocomplete="off" />
+            <button id="btn-emoji-picker" class="chat-action-btn" type="button" data-i18n-title="emojiPicker" aria-label="Abrir seletor de emojis" title="Abrir seletor de emojis" aria-expanded="false">
+              <img src="src/assets/icons/emoji.svg" alt="" />
+            </button>
+            <div id="emoji-picker" class="emoji-picker hidden" role="dialog" data-i18n-title="emojiPicker" aria-label="Seletor de emojis"></div>
+            <button id="btn-send-message" class="chat-action-btn chat-action-btn--send" type="submit" data-i18n-title="sendMessage" aria-label="Enviar mensagem" title="Enviar mensagem">
+              <img src="src/assets/icons/send.svg" alt="" />
+            </button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <div id="file-lightbox" class="file-lightbox hidden" role="dialog" aria-modal="true">
+    <button id="btn-close-file-lightbox" class="file-lightbox__close" type="button" data-i18n-title="closePreview" aria-label="Fechar visualização">×</button>
+    <img id="file-lightbox-image" class="file-lightbox__image" alt="" />
+  </div>
+
+  <div id="join-dialog" class="rendezvous-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="join-title">
+    <div class="rendezvous-card">
+      <h2 id="join-title" data-i18n="joinRoom">Entrar na sala</h2>
+      <p data-i18n="joinCodeHint">Envie este código a alguém que já está na sala. Ele deve clicar em Adicionar.</p>
+      <output id="join-code" class="rendezvous-code" aria-label="Código de entrada">·····</output>
+      <p id="join-status" class="rendezvous-status" role="status" aria-live="polite"></p>
+      <div class="rendezvous-actions">
+        <button id="btn-copy-join-code" class="btn btn--outline" type="button" data-i18n="copyCode">Copiar código</button>
+        <button id="btn-confirm-join" class="btn btn--blue" type="button" data-i18n="confirmJoin">Confirmar entrada</button>
+        <button id="btn-regenerate-join" class="btn btn--blue hidden" type="button" data-i18n="newCode">Gerar novo código</button>
+        <button id="btn-cancel-join" class="btn btn--outline" type="button" data-i18n="cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="backend-dialog" class="rendezvous-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="backend-title">
+    <form id="form-backend" class="rendezvous-card">
+      <h2 id="backend-title" data-i18n="configureBackend">Configurar servidor</h2>
+      <p id="backend-hint" data-i18n="backendHint">Informe a URL completa da API de um servidor compatível. Deixe vazio para usar o servidor padrão.</p>
+      <label class="field">
+        <span class="field__label" data-i18n="backendUrlLabel">URL do backend</span>
+        <input id="input-backend-url" class="input" type="url" maxlength="2048" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="https://seu-servidor.example/api/" aria-describedby="backend-hint backend-status" />
+      </label>
+      <p id="backend-status" class="rendezvous-status" role="status" aria-live="polite"></p>
+      <div class="rendezvous-actions">
+        <button id="btn-confirm-backend" class="btn btn--green" type="submit" data-i18n="confirm">Confirmar</button>
+        <button id="btn-cancel-backend" class="btn btn--outline" type="button" data-i18n="cancel">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="add-friend-dialog" class="rendezvous-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="add-friend-title">
+    <form id="form-add-friend" class="rendezvous-card">
+      <h2 id="add-friend-title" data-i18n="addFriend">Adicionar</h2>
+      <p data-i18n="addFriendHint">Peça para seu amigo clicar em Entrar na sala e envie aqui o código dele.</p>
+      <input id="input-friend-code" class="input rendezvous-code-input" type="text" maxlength="5" pattern="[A-Z]{5}" autocomplete="off" autocapitalize="characters" spellcheck="false" required data-i18n-placeholder="friendCode" placeholder="Código do amigo" />
+      <p id="add-friend-status" class="rendezvous-status" role="status" aria-live="polite"></p>
+      <div class="rendezvous-actions">
+        <button id="btn-confirm-friend" class="btn btn--blue" type="submit" data-i18n="addFriend">Adicionar</button>
+        <button id="btn-cancel-friend" class="btn btn--outline" type="button" data-i18n="cancel">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="src/main.ts"></script>
+</body>
+</html>

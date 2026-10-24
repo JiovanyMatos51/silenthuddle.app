@@ -1,0 +1,65 @@
+# Logs and local runtime output
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node, Vite and frontend output
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+.vercel/
+*.jks
+*.keystore
+*.p12
+*.pfx
+key.properties
+keystore.properties
+release-signing-credentials.txt
+
+# Rust and Tauri build output
+/src-tauri/target/
+
+# Android / Gradle generated output (keep the generated project sources)
+**/.gradle/
+**/build/
+**/.cxx/
+**/.externalNativeBuild/
+**/local.properties
+**/captures/
+**/*.iml
+/src-tauri/gen/android/app/src/main/jniLibs/**/*.so
+
+# Local releases and packaged installers
+/releases/
+*.apk
+*.aab
+*.msi
+*.exe
+*.dmg
+*.AppImage
+SilentHuddle-Web*.zip
+
+# Editor and operating system files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

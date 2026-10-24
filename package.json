@@ -1,0 +1,24 @@
+{
+  "name": "silent-huddle",
+  "private": true,
+  "version": "1.4.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "node scripts/dev-api.js",
+    "check": "tsc --noEmit",
+    "test": "node testesbackend/index.test.js && node --experimental-transform-types scripts/protocol.test.ts && node --experimental-transform-types scripts/features.test.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16"
+  }
+}

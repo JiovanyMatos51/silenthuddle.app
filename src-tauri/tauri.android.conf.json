@@ -1,0 +1,9 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "identifier": "com.silenthuddle.mobile",
+  "bundle": {
+    "android": {
+      "minSdkVersion": 24
+    }
+  }
+}
