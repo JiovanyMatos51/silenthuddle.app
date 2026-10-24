@@ -35,7 +35,7 @@
     "shortDescription": "Private peer-to-peer conversations.",
     "longDescription": "SilentHuddle is a private peer-to-peer communication app with messaging, file transfer, voice, video and screen sharing.",
     "homepage": "https://silenthuddle.example",
-    "license": "Proprietary",
+    "license": "MIT",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

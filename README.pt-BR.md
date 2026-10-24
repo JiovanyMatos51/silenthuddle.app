@@ -133,16 +133,16 @@ O histórico pertence à sessão em memória e termina quando o usuário sai del
 ```text
 src/                 Interface, WebRTC, chat, mídia e configurações
 src-tauri/           Aplicativo nativo Tauri, Rust e configuração Android
-backendvercel/       API de sinalização para Vercel e Redis
+backend/             API de sinalização para Vercel e Redis
 api/                 Wrapper para publicar a API usando a raiz do projeto
 scripts/             API local e testes de protocolo/recursos
-testesbackend/       Testes do backend de sinalização
+localbackendtests/   Testes do backend de sinalização
 ```
 
-**Atualização necessária:** publique o backend 1.4.1 de `backendvercel` antes
+**Atualização necessária:** publique o backend 1.4.1 de `backend` antes
 de distribuir os clientes 1.4.1: a checagem de versão exige `v1.4.1`.
 O protocolo não é compatível com o diretório
-de salas da versão 1.3.3. Consulte `backendvercel/README.md`.
+de salas da versão 1.3.3. Consulte `backend/README.md`.
 
 ## Desenvolvimento
 
@@ -257,7 +257,7 @@ VITE_TURN_CREDENTIAL=senha
 ```
 
 As instruções do encontro inicial no backend estão em
-`backendvercel/README.md`.
+`backend/README.md`.
 
 ## Identidade e metadados do aplicativo
 
@@ -270,15 +270,15 @@ As instruções do encontro inicial no backend estão em
 
 ## Licença
 
-O manifesto Rust atualmente marca o projeto como proprietário e o repositório
-não inclui um arquivo `LICENSE`. Defina a licença e inclua seu texto antes de
-aceitar contribuições ou autorizar redistribuição do código.
+O SilentHuddle está sob a **licença MIT**. Consulte [`LICENSE.txt`](LICENSE.txt)
+para ler o texto completo. A licença permite uso, modificação e redistribuição,
+inclusive comercial, desde que os avisos de copyright e da licença sejam mantidos.
 
 ## Verificação sem compilar instaladores
 
 ```powershell
 node node_modules/typescript/bin/tsc --noEmit
-node testesbackend/index.test.js
+node localbackendtests/index.test.js
 node --experimental-transform-types scripts/protocol.test.ts
 node --experimental-transform-types scripts/features.test.ts
 ```

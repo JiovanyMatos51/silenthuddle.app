@@ -1,1 +1,1 @@
-export { default } from "../backendvercel/api/index.js";
+export { default } from "../backend/api/index.js";

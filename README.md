@@ -119,10 +119,10 @@ to someone who joins later. Private `/msg` conversations and local command
 notices are not included in this synchronization. Chat history stays in memory
 for the session and ends when the user leaves it.
 
-**Backend update required:** deploy the 1.4.1 backend from `backendvercel` before
+**Backend update required:** deploy the 1.4.1 backend from `backend` before
 distributing 1.4.1 clients. The version check requires `v1.4.1`. This protocol is
 not compatible with the 1.3.3 room directory. See
-[`backendvercel/README.md`](backendvercel/README.md).
+[`backend/README.md`](backend/README.md).
 
 ## Chat commands
 
@@ -139,10 +139,10 @@ not compatible with the 1.3.3 room directory. See
 ```text
 src/                 UI, WebRTC, chat, media, and settings
 src-tauri/           Tauri desktop app, Rust code, and Android configuration
-backendvercel/       Vercel signaling API and Redis integration
+backend/             Vercel signaling API and Redis integration
 api/                 API wrapper for deploying from the project root
 scripts/             Local API server and protocol/feature tests
-testesbackend/       Signaling backend tests
+localbackendtests/   Signaling backend tests
 ```
 
 ## Development
@@ -232,7 +232,7 @@ $env:VITE_SIGNALING_API_BASE = "http://127.0.0.1:3001/api/"
 npm run tauri -- dev
 ```
 
-To deploy on Vercel, set `backendvercel` as the Root Directory, or deploy that
+To deploy on Vercel, set `backend` as the Root Directory, or deploy that
 folder as a separate project. Configure `UPSTASH_REDIS_REST_URL` and
 `UPSTASH_REDIS_REST_TOKEN` (or the legacy `KV_REST_API_URL` and
 `KV_REST_API_TOKEN`). See the backend README for routes, rate limits, CORS, and
@@ -261,7 +261,7 @@ password.
 
 Keep the version synchronized in `package.json`, `src-tauri/tauri.conf.json`,
 `src-tauri/Cargo.toml`, `src/config.ts`, and the `VERSION` constant in
-`backendvercel/api/index.js`. The backend rejects clients with a different
+`backend/api/index.js`. The backend rejects clients with a different
 version string.
 
 The app name, version, identifier, publisher, copyright, and installer
@@ -270,6 +270,6 @@ descriptions are in `src-tauri/tauri.conf.json`. Rust package metadata is in
 
 ## License
 
-The Rust manifest currently marks the project as proprietary, and the repository
-does not include a `LICENSE` file. Choose and add a license before accepting
-contributions or authorizing redistribution of the source code.
+SilentHuddle is licensed under the **MIT License**. See [`LICENSE.txt`](LICENSE.txt)
+for the full text. The license permits use, modification, and redistribution,
+including commercially, provided the copyright and license notice are retained.

@@ -2,12 +2,13 @@
   "name": "silent-huddle",
   "private": true,
   "version": "1.4.1",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:api": "node scripts/dev-api.js",
     "check": "tsc --noEmit",
-    "test": "node testesbackend/index.test.js && node --experimental-transform-types scripts/protocol.test.ts && node --experimental-transform-types scripts/features.test.ts",
+    "test": "node localbackendtests/index.test.js && node --experimental-transform-types scripts/protocol.test.ts && node --experimental-transform-types scripts/features.test.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri"

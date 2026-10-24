@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import handler from "../backendvercel/api/index.js";
+import handler from "../backend/api/index.js";
 
 const port = 3001;
 

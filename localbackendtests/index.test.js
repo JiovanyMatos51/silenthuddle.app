@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import test from "node:test";
-import handler from "../backendvercel/api/index.js";
+import handler from "../backend/api/index.js";
 
 const offer = { type: "offer", sdp: "v=0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\n" };
 const answer = { ...offer, type: "answer" };

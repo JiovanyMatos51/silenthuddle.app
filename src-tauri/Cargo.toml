@@ -3,7 +3,7 @@ name = "silent-huddle"
 version = "1.4.1"
 description = "Private peer-to-peer communication for small groups"
 authors = ["SilentHuddle Labs <contact@silenthuddle.example>"]
-license = "LicenseRef-Proprietary"
+license = "MIT"
 homepage = "https://silenthuddle.example"
 edition = "2021"
 

@@ -149,9 +149,9 @@ test("versões e rotas de publicação apontam para os arquivos atuais", () => {
   assert.equal(JSON.parse(read("src-tauri/tauri.conf.json")).version, "1.4.1");
   assert.match(read("src-tauri/Cargo.toml"), /version = "1\.4\.1"/);
   assert.match(read("src/config.ts"), /CLIENT_VERSION = "v1\.4\.1"/);
-  assert.match(read("backendvercel/api/index.js"), /VERSION = "v1\.4\.1"/);
+  assert.match(read("backend/api/index.js"), /VERSION = "v1\.4\.1"/);
   assert.match(read("src-tauri/gen/android/app/tauri.properties"), /versionCode=1004001/);
-  for (const [root, path] of [["", "vercel.json"], ["backendvercel/", "backendvercel/vercel.json"]]) {
+  for (const [root, path] of [["", "vercel.json"], ["backend/", "backend/vercel.json"]]) {
     const config = JSON.parse(read(path));
     for (const build of config.builds) {
       assert.ok(existsSync(new URL(`../${root}${build.src}`, import.meta.url)), `${path}: missing build source`);
