@@ -11,9 +11,7 @@ participants whenever the network allows it.
 
 **Current version: 1.4.1**
 
-<p align="center">
-  <img src="src-tauri/icons/icon.png" alt="SilentHuddle logo" width="112" />
-</p>
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jiovanymatos51)
 
 ## Features
 
